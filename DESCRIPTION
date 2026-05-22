@@ -1,0 +1,19 @@
+Package: ssmooth
+Title: Smooth Raster Time Series
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Connor", "Duffin", , "connor.duffin@nhm.ac.uk", role = c("aut", "cre")),
+    person("The Trustees of The Natural History Museum, London", role = c("cph")))
+Description: Smooth a sequence of rasters using various algorithms (e.g. moving average, weighted moving average, exponential smoothing).
+Imports:
+    terra,
+    Rcpp
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+LinkingTo: 
+    Rcpp
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
