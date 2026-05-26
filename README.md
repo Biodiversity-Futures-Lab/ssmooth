@@ -2,6 +2,7 @@
 
 <!-- badges: start -->
  [![R-CMD-check](https://github.com/Biodiversity-Futures-Lab/ssmooth/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Biodiversity-Futures-Lab/ssmooth/actions/workflows/R-CMD-check.yaml)
+ [![format-check](https://github.com/Biodiversity-Futures-Lab/ssmooth/actions/workflows/format-check.yaml/badge.svg)](https://github.com/Biodiversity-Futures-Lab/ssmooth/actions/workflows/format-check.yaml)
   <!-- badges: end -->
 
 Run time series smoothing on `terra` `SpatRaster` objects. Applies a simple smoothing algorithm to each pixels' time series.
