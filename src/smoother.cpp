@@ -6,6 +6,7 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericVector exponential_ma(const NumericVector &x, double alpha, int n_init)
 {
+  // Note that we need n_init <= x.size() to compute the initial mean
   int nx = x.size();
   NumericVector out(nx);
   double mean_first = 0.0;
