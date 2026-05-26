@@ -4,7 +4,14 @@
 \alias{SmoothRasterTS}
 \title{Smooth Raster Time Series}
 \usage{
-SmoothRasterTS(rast, ..., cores = 1L)
+SmoothRasterTS(
+  rast,
+  ...,
+  cores = 1L,
+  filename = "",
+  overwrite = FALSE,
+  wopt = list()
+)
 }
 \arguments{
 \item{rast}{SpatRaster. A multi-layer raster object where each layer
@@ -15,6 +22,15 @@ represents a time point in the series.}
 
 \item{cores}{Integer. Number of CPU cores to use for parallel processing.
 Default is 1. Don't change this unless you know what you're doing.}
+
+\item{filename}{Character. Optional filename for writing the output raster.
+If provided, the output raster will be written to this file.}
+
+\item{overwrite}{Logical. If TRUE and \code{filename} is provided, allows
+overwriting the existing file; optional.}
+
+\item{wopt}{List. Optional list of additional arguments to pass to
+\code{terra::writeRaster}.}
 }
 \value{
 SpatRaster. A multi-layer raster object with smoothed time series for

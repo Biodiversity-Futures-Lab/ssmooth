@@ -89,6 +89,12 @@ SmoothTS <- function(
 #'   `method`, `n`, `weights`, `alpha`, and `n_init`.
 #' @param cores Integer. Number of CPU cores to use for parallel processing.
 #'   Default is 1. Don't change this unless you know what you're doing.
+#' @param filename Character. Optional filename for writing the output raster.
+#'   If provided, the output raster will be written to this file.
+#' @param overwrite Logical. If TRUE and `filename` is provided, allows
+#'   overwriting the existing file; optional.
+#' @param wopt List. Optional list of additional arguments to pass to
+#'   `terra::writeRaster`.
 #' @return SpatRaster. A multi-layer raster object with smoothed time series for
 #'   each pixel.
 #'
@@ -99,6 +105,26 @@ SmoothTS <- function(
 #' out <- SmoothRasterTS(rast, method = "mean", n = 3)
 #'
 #' @export
-SmoothRasterTS <- function(rast, ..., cores = 1L) {
-  return(terra::app(rast, SmoothTS, ..., cores = cores))
+SmoothRasterTS <- function(
+  rast,
+  ...,
+  cores = 1L,
+  filename = "",
+  overwrite = FALSE,
+  wopt = list()
+) {
+  if (!inherits(rast, "SpatRaster")) {
+    stop("Input must be a SpatRaster object")
+  }
+
+  # 'app' applies the function over the layers of the raster
+  return(terra::app(
+    rast,
+    SmoothTS,
+    ...,
+    cores = cores,
+    filename = filename,
+    overwrite = overwrite,
+    wopt = wopt
+  ))
 }
