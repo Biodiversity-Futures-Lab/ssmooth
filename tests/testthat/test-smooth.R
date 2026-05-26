@@ -67,7 +67,7 @@ test_that("SmoothRasterTS errors for invalid method", {
   rast <- MakeTestRaster()
   expect_error(
     SmoothRasterTS(rast, method = "foobar"),
-    "Given method not recognised"
+    "Method must be one of 'mean', 'weighted', or 'exponential'"
   )
 })
 
@@ -149,6 +149,6 @@ test_that("SmoothTS throws error for invalid method", {
   x <- 1:5
   expect_error(
     SmoothTS(x, method = "not_a_method"),
-    "Given method not recognised"
+    "Method must be one of 'mean', 'weighted', or 'exponential'"
   )
 })

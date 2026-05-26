@@ -4,7 +4,7 @@
 \alias{SmoothRasterTS}
 \title{Smooth Raster Time Series}
 \usage{
-SmoothRasterTS(rast, ...)
+SmoothRasterTS(rast, ..., cores = 1L)
 }
 \arguments{
 \item{rast}{SpatRaster. A multi-layer raster object where each layer
@@ -12,6 +12,9 @@ represents a time point in the series.}
 
 \item{...}{Additional arguments passed to the \code{SmoothTS} function, such as
 \code{method}, \code{n}, \code{weights}, \code{alpha}, and \code{n_init}.}
+
+\item{cores}{Integer. Number of CPU cores to use for parallel processing.
+Default is 1. Don't change this unless you know what you're doing.}
 }
 \value{
 SpatRaster. A multi-layer raster object with smoothed time series for
@@ -27,4 +30,11 @@ Assumes that the input raster has multiple layers, where each layer
 represents a time point in the series. The function applies the specified
 smoothing method to the time series of each pixel across the layers and
 returns a new raster with the smoothed time series for each pixel.
+}
+\examples{
+
+rast <- terra::rast(nrow = 1, ncol = 2, nlyrs = 5)
+terra::values(rast) <- matrix(rep(1:5, each = 2), nrow = 2)
+out <- SmoothRasterTS(rast, method = "mean", n = 3)
+
 }

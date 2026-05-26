@@ -8,7 +8,7 @@ SmoothTS(
   x,
   method = "exponential",
   n = 3,
-  weights = NULL,
+  weights = rep(1, 3),
   alpha = 0.3,
   n_init = 5
 )
@@ -40,4 +40,11 @@ Numeric vector of smoothed values.
 Applies a smoothing operation to a numeric vector (time series data) using
 one of three methods: mean (moving average), weighted moving average, or
 exponential moving average.
+}
+\examples{
+x <- 1:10
+SmoothTS(x, method = "mean", n = 3)
+SmoothTS(x, method = "weighted", n = 3, weights = c(0.1, 0.5, 0.4))
+SmoothTS(x, method = "exponential", alpha = 0.5, n_init = 3)
+
 }

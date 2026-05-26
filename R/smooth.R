@@ -19,26 +19,56 @@
 #'   method). Default is 5.
 #' @return Numeric vector of smoothed values.
 #'
+#' @examples
+#' x <- 1:10
+#' SmoothTS(x, method = "mean", n = 3)
+#' SmoothTS(x, method = "weighted", n = 3, weights = c(0.1, 0.5, 0.4))
+#' SmoothTS(x, method = "exponential", alpha = 0.5, n_init = 3)
+#'
 #' @export
 SmoothTS <- function(
   x,
   method = "exponential",
   n = 3,
-  weights = NULL,
+  weights = rep(1, 3),
   alpha = 0.3,
   n_init = 5
 ) {
+  if (!is.numeric(x)) {
+    stop("Input x must be a numeric vector")
+  }
+
+  if (!method %in% c("mean", "weighted", "exponential")) {
+    stop("Method must be one of 'mean', 'weighted', or 'exponential'")
+  }
+
   if (method == "mean") {
+    if (n <= 0 || n > length(x)) {
+      stop("n must be a positive integer <= length(x)")
+    }
+
     return(simple_ma(x, n))
   } else if (method == "weighted") {
-    if (is.null(weights)) {
-      weights <- rep(1, n)
+    if (!is.numeric(weights)) {
+      stop("weights must be a numeric vector")
     }
+
+    if (length(weights) > length(x)) {
+      stop("Length of weights cannot be greater than the length of x")
+    }
+
     return(weighted_ma(x, weights))
   } else if (method == "exponential") {
+    if (alpha <= 0 || alpha >= 1) {
+      stop("alpha must be between 0 and 1 for exponential moving average")
+    }
+
+    if (n_init <= 0 || n_init > length(x)) {
+      stop(
+        "n_init must be a positive integer <= length(x)"
+      )
+    }
     return(exponential_ma(x, alpha, n_init))
-  } else {
-    stop("Given method not recognised")
   }
 }
 
@@ -57,10 +87,18 @@ SmoothTS <- function(
 #'   represents a time point in the series.
 #' @param ... Additional arguments passed to the `SmoothTS` function, such as
 #'   `method`, `n`, `weights`, `alpha`, and `n_init`.
+#' @param cores Integer. Number of CPU cores to use for parallel processing.
+#'   Default is 1. Don't change this unless you know what you're doing.
 #' @return SpatRaster. A multi-layer raster object with smoothed time series for
 #'   each pixel.
 #'
+#' @examples
+#'
+#' rast <- terra::rast(nrow = 1, ncol = 2, nlyrs = 5)
+#' terra::values(rast) <- matrix(rep(1:5, each = 2), nrow = 2)
+#' out <- SmoothRasterTS(rast, method = "mean", n = 3)
+#'
 #' @export
-SmoothRasterTS <- function(rast, ...) {
-  return(terra::app(rast, SmoothTS, ..., cores = 1))
+SmoothRasterTS <- function(rast, ..., cores = 1L) {
+  return(terra::app(rast, SmoothTS, ..., cores = cores))
 }
