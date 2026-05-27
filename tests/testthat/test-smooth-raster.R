@@ -20,7 +20,10 @@ test_that("SmoothRasterTS works with mean (moving average)", {
   rast <- MakeTestRaster(nrow = 1, ncol = 2, nlayers = 5)
 
   # All time series are c(1,2,3,4,5)
-  out <- SmoothRasterTS(rast, method = "mean", n = 3)
+  expect_warning(
+    out <- SmoothRasterTS(rast, method = "mean", n = 3),
+    "Input raster has incomplete dates: smoothing will be applied across layers in order"
+  )
   expect_equal(
     terra::values(out),
     matrix(rep(c(2, 2, 3, 4, 4), each = 2), nrow = 2),
@@ -32,7 +35,10 @@ test_that("SmoothRasterTS works with mean (moving average)", {
 test_that("SmoothRasterTS works with weighted moving average", {
   rast <- MakeTestRaster(nrow = 1, ncol = 1, nlayers = 5)
   weights <- c(0.2, 0.3, 0.5)
-  out <- SmoothRasterTS(rast, method = "weighted", n = 3, weights = weights)
+  expect_warning(
+    out <- SmoothRasterTS(rast, method = "weighted", n = 3, weights = weights),
+    "Input raster has incomplete dates: smoothing will be applied across layers in order"
+  )
   mat <- terra::values(out)
   expect_equal(
     mat,
@@ -46,11 +52,14 @@ test_that("SmoothRasterTS works with exponential moving average", {
   rast <- MakeTestRaster(nrow = 1, ncol = 1, nlayers = 5)
   alpha <- 0.5
   n_init <- 2
-  out <- SmoothRasterTS(
-    rast,
-    method = "exponential",
-    alpha = alpha,
-    n_init = n_init
+  expect_warning(
+    out <- SmoothRasterTS(
+      rast,
+      method = "exponential",
+      alpha = alpha,
+      n_init = n_init
+    ),
+    "Input raster has incomplete dates: smoothing will be applied across layers in order"
   )
   mat <- terra::values(out)
 
@@ -63,17 +72,28 @@ test_that("SmoothRasterTS works with exponential moving average", {
   expect_equal(mat, expected, ignore_attr = TRUE, tolerance = 1e-8)
 })
 
+test_that("SmoothRasterTS errors for incorrect input datatype", {
+  df <- data.frame(a = 1:5, b = 6:10)
+  expect_error(
+    suppressWarnings(SmoothRasterTS(df, method = "mean", n = 3)),
+    "Input must be a SpatRaster object"
+  )
+})
+
 test_that("SmoothRasterTS errors for invalid method", {
   rast <- MakeTestRaster()
   expect_error(
-    SmoothRasterTS(rast, method = "foobar"),
+    suppressWarnings(SmoothRasterTS(rast, method = "foobar")),
     "Method must be one of 'mean', 'weighted', or 'exponential'"
   )
 })
 
 test_that("SmoothRasterTS works for multi-pixel raster", {
   rast <- MakeTestRaster(nrow = 2, ncol = 2, nlayers = 4)
-  out <- SmoothRasterTS(rast, method = "mean", n = 2)
+  expect_warning(
+    out <- SmoothRasterTS(rast, method = "mean", n = 2),
+    "Input raster has incomplete dates: smoothing will be applied across layers in order"
+  )
   mat <- terra::values(out)
   expected <- matrix(
     rep(c(1.75, 1.5, 2.5, 3.5), each = 4),
@@ -90,7 +110,10 @@ test_that("SmoothRasterTS works for multi-pixel raster", {
 
 test_that("SmoothRasterTS preserves raster dimensions and layer count", {
   rast <- MakeTestRaster(nrow = 3, ncol = 2, nlayers = 6)
-  out <- SmoothRasterTS(rast, method = "mean", n = 2)
+  expect_warning(
+    out <- SmoothRasterTS(rast, method = "mean", n = 2),
+    "Input raster has incomplete dates: smoothing will be applied across layers in order"
+  )
   expect_equal(dim(out), dim(rast))
 })
 
@@ -100,7 +123,10 @@ test_that("SmoothRasterTS propagates NA correctly", {
     terra::rast(matrix(c(3, NA), 1, 2)),
     terra::rast(matrix(c(4, 5), 1, 2))
   ))
-  out <- SmoothRasterTS(rast, method = "mean", n = 2)
+  expect_warning(
+    out <- SmoothRasterTS(rast, method = "mean", n = 2),
+    "Input raster has incomplete dates: smoothing will be applied across layers in order"
+  )
   mat <- terra::values(out)
 
   # If NA present, moving average should result in NA for that window

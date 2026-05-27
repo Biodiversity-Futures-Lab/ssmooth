@@ -57,6 +57,10 @@ SmoothTS <- function(
       stop("Length of weights cannot be greater than the length of x")
     }
 
+    if (any(weights <= 0)) {
+      stop("Weights have to be positive")
+    }
+
     return(weighted_ma(x, weights))
   } else if (method == "exponential") {
     if (alpha <= 0 || alpha >= 1) {
