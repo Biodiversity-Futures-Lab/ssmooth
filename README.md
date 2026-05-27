@@ -27,4 +27,4 @@ terra::values(r) <- rep(1:4, each = 10)
 SmoothRasterTS(r, "mean")
 ```
 
-We assume that the layers are temporally ordered (oldest -> newest).
+We assume that the layers are temporally ordered (oldest -> newest): if time information is detected in the layers (`terra::time()`), then smoothing will be applied in temporal order. If no time information is found then smoothing will be applied across layers in order.
