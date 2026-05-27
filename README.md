@@ -5,7 +5,7 @@
  [![format-check](https://github.com/Biodiversity-Futures-Lab/ssmooth/actions/workflows/format-check.yaml/badge.svg)](https://github.com/Biodiversity-Futures-Lab/ssmooth/actions/workflows/format-check.yaml)
   <!-- badges: end -->
 
-Run time series smoothing on `terra::SpatRaster` objects. Applies a simple smoothing algorithm to each pixels' time series.
+Run time series smoothing on `terra::SpatRaster` objects. Applies a simple smoothing algorithm to each pixels' time series. Currently supports simple moving average, weighted moving average, and exponential smoothing.
 
 ## Installation
 
