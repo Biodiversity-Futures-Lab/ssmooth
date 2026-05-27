@@ -117,8 +117,19 @@ SmoothRasterTS <- function(
     stop("Input must be a SpatRaster object")
   }
 
+  dates <- terra::time(rast)
+  if (any(is.na(dates))) {
+    warning(
+      "Input raster has incomplete dates: smoothing will be applied across layers in order"
+    )
+  } else {
+    # Ensure dates are in the correct order
+    rast <- rast[[order(dates)]]
+    dates <- dates[order(dates)]
+  }
+
   # 'app' applies the function over the layers of the raster
-  return(terra::app(
+  result <- terra::app(
     rast,
     SmoothTS,
     ...,
@@ -126,5 +137,9 @@ SmoothRasterTS <- function(
     filename = filename,
     overwrite = overwrite,
     wopt = wopt
-  ))
+  )
+
+  # Propagate time information to the output raster
+  terra::time(result) <- dates
+  return(result)
 }
