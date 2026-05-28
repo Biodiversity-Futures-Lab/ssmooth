@@ -4,6 +4,17 @@
 #' one of three methods: mean (moving average), weighted moving average, or
 #' exponential moving average.
 #'
+#' For the "mean" method, a simple moving average is computed over a specified
+#' window size. For the "weighted" method, a weighted moving average is computed
+#' using a specified set of weights. For the "exponential" method, an
+#' exponential moving average is computed using a specified smoothing factor
+#' (alpha) and a specified number of initial points to use for the first
+#' smoothed value.
+#'
+#' If you use a windowing method (mean or weighted), the function pads the
+#' input vector with the mean of the non-NA values at the beginning and end to
+#' ensure that the output vector has the same length as the input.
+#'
 #' @param x Numeric vector. The time series data to be smoothed.
 #' @param method Character. Smoothing method to use. Options are \code{"mean"},
 #'   \code{"weighted"}, or \code{"exponential"}. Default is

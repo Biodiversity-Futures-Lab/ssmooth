@@ -42,6 +42,18 @@ Applies a smoothing operation to a numeric vector (time series data) using
 one of three methods: mean (moving average), weighted moving average, or
 exponential moving average.
 }
+\details{
+For the "mean" method, a simple moving average is computed over a specified
+window size. For the "weighted" method, a weighted moving average is computed
+using a specified set of weights. For the "exponential" method, an
+exponential moving average is computed using a specified smoothing factor
+(alpha) and a specified number of initial points to use for the first
+smoothed value.
+
+If you use a windowing method (mean or weighted), the function pads the
+input vector with the mean of the non-NA values at the beginning and end to
+ensure that the output vector has the same length as the input.
+}
 \examples{
 x <- 1:10
 SmoothTS(x, method = "mean", n = 3)

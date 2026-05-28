@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: c(
     person("Connor", "Duffin", , "c.duffin@protonmail.com", role = c("aut", "cre")),
     person("The Trustees of The Natural History Museum, London", role = c("cph")))
-Description: Smooth a sequence of 'terra' rasters using various algorithms (moving average, weighted moving average, exponential smoothing). Also includes wrappers to smooth a vector time-series. All smoothers use 'Rcpp' implementations for performance.
+Description: Smooth a sequence of 'terra' rasters using various algorithms (currently moving average, weighted moving average, and exponential smoothing). Also includes wrappers to smooth a vector time-series using these same algorithms. All smoothers use 'Rcpp' implementations for performance.
 Imports:
     terra,
     Rcpp
