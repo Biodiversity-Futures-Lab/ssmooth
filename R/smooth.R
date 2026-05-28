@@ -34,6 +34,11 @@ SmoothTS <- function(
   alpha = 0.3,
   n_init = 5
 ) {
+  # Guard against all NA input: return as is
+  if (all(is.na(x))) {
+    return(x)
+  }
+
   if (!is.numeric(x)) {
     stop("Input x must be a numeric vector")
   }

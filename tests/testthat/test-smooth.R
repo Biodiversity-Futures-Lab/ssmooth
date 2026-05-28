@@ -36,6 +36,64 @@ test_that("SmoothTS computes exponential moving average with small n_init", {
   expect_equal(as.numeric(result), as.numeric(expected))
 })
 
+test_that("SmoothTS works with NA values in mean method", {
+  x <- c(1, NA, 3, 4, 5)
+  result <- SmoothTS(x, method = "mean", n = 3)
+  expected <- c(NA, NA, NA, 4, 12.25 / 3)
+  expect_equal(as.numeric(result), as.numeric(expected))
+})
+
+test_that("SmoothTS works with NA values in weighted method", {
+  x <- c(1, NA, 3, 4, 5)
+  weights <- c(0.1, 0.2, 0.1)
+  result <- SmoothTS(x, method = "weighted", n = 3, weights = weights)
+  expected <- c(NA, NA, NA, 4, 4.3125)
+  expect_equal(as.numeric(result), as.numeric(expected))
+})
+
+test_that("SmoothTS works with NA values in exponential method", {
+  x <- c(10, NA, 20, 30, 40)
+  alpha <- 0.5
+  result <- SmoothTS(x, method = "exponential", alpha = alpha, n_init = 1)
+  expected <- c(10, NA, NA, NA, NA)
+  expect_equal(as.numeric(result), as.numeric(expected))
+})
+
+test_that("SmoothTS correctly windows NA values", {
+  x <- c(1:99, NA, 101:200)
+  result <- SmoothTS(x, method = "mean", n = 3)
+  expected <- simple_ma(x, 3)
+  expect_equal(sum(is.na(result)), 3)
+  expect_equal(as.numeric(result), as.numeric(expected))
+})
+
+test_that("SmoothTS correctly windows NA values", {
+  x <- c(1:99, NA, 101:200)
+  result <- SmoothTS(x, method = "mean", n = 5)
+  expected <- simple_ma(x, 5)
+  print(expected)
+  expect_equal(sum(is.na(result)), 5)
+  expect_equal(as.numeric(result), as.numeric(expected))
+})
+
+test_that("SmoothTS returns NA for all NA input", {
+  x <- c(NA, NA, NA)
+  result <- SmoothTS(x, method = "mean", n = 3)
+  expect_equal(result, x)
+})
+
+test_that("SmoothTS returns NA for all NA input in weighted method", {
+  x <- c(NA, NA, NA)
+  result <- SmoothTS(x, method = "weighted", n = 3, weights = c(0.1, 0.5, 0.4))
+  expect_equal(result, x)
+})
+
+test_that("SmoothTS returns NA for all NA input in exponential method", {
+  x <- c(NA, NA, NA)
+  result <- SmoothTS(x, method = "exponential", alpha = 0.5, n_init = 3)
+  expect_equal(result, x)
+})
+
 test_that("SmoothTS throws error for non-numeric input", {
   x <- c("a", "b", "c")
   expect_error(
