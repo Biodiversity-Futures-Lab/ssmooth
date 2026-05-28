@@ -8,10 +8,11 @@
 #' @param method Character. Smoothing method to use. Options are \code{"mean"},
 #'   \code{"weighted"}, or \code{"exponential"}. Default is
 #'   \code{"exponential"}.
-#' @param n Integer. Number of points for the moving average (used in "mean" and
-#'   "weighted" methods). Default is 3.
+#' @param n Integer. Number of points for the moving average (used in "mean"
+#'   method). Default is 3.
 #' @param weights Numeric vector. Weights for the weighted moving average (used
-#'   in "weighted" method). If NULL, equal weights are used. Default is NULL.
+#'   in "weighted" method). Default is a vector of 1's (i.e., simple moving
+#'   average).
 #' @param alpha Numeric. Smoothing factor for exponential moving average (used
 #'   in "exponential" method). Default is 0.3.
 #' @param n_init Integer. Number of initial points to use for the first

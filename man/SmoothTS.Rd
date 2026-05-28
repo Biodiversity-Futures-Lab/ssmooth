@@ -20,11 +20,12 @@ SmoothTS(
 \code{"weighted"}, or \code{"exponential"}. Default is
 \code{"exponential"}.}
 
-\item{n}{Integer. Number of points for the moving average (used in "mean" and
-"weighted" methods). Default is 3.}
+\item{n}{Integer. Number of points for the moving average (used in "mean"
+method). Default is 3.}
 
 \item{weights}{Numeric vector. Weights for the weighted moving average (used
-in "weighted" method). If NULL, equal weights are used. Default is NULL.}
+in "weighted" method). Default is a vector of 1's (i.e., simple moving
+average).}
 
 \item{alpha}{Numeric. Smoothing factor for exponential moving average (used
 in "exponential" method). Default is 0.3.}
