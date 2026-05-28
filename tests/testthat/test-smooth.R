@@ -76,6 +76,14 @@ test_that("SmoothTS correctly windows NA values", {
   expect_equal(as.numeric(result), as.numeric(expected))
 })
 
+test_that("SmoothTS correctly handles first NA values in exponential method", {
+  x <- c(NA, NA, 10, 20, 30)
+  alpha <- 0.5
+  result <- SmoothTS(x, method = "exponential", alpha = alpha, n_init = 3)
+  expected <- rep(NA, 5)
+  expect_equal(as.numeric(result), as.numeric(expected))
+})
+
 test_that("SmoothTS returns NA for all NA input", {
   x <- c(NA, NA, NA)
   result <- SmoothTS(x, method = "mean", n = 3)
