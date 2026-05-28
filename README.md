@@ -9,7 +9,13 @@ Run time series smoothing on `terra::SpatRaster` objects. Applies a simple smoot
 
 ## Installation
 
-Install from this GitHub repo via:
+Install from CRAN via:
+
+```r
+install.packages("ssmooth")
+```
+
+Alternatively, install the development version from this GitHub repo via:
 
 ```r
 # install.packages("pak")
