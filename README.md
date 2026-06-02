@@ -1,6 +1,7 @@
 # ssmooth
 
 <!-- badges: start -->
+ [![CRAN](https://www.r-pkg.org/badges/version/ssmooth)](https://CRAN.R-project.org/package=ssmooth)
  [![R-CMD-check](https://github.com/Biodiversity-Futures-Lab/ssmooth/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Biodiversity-Futures-Lab/ssmooth/actions/workflows/R-CMD-check.yaml)
  [![format-check](https://github.com/Biodiversity-Futures-Lab/ssmooth/actions/workflows/format-check.yaml/badge.svg)](https://github.com/Biodiversity-Futures-Lab/ssmooth/actions/workflows/format-check.yaml)
   <!-- badges: end -->
