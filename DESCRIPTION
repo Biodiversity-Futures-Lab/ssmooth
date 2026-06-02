@@ -1,6 +1,6 @@
 Package: ssmooth
 Title: Smooth Raster Time Series
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: c(
     person("Connor", "Duffin", , "c.duffin@protonmail.com", role = c("aut", "cre")),
     person("The Trustees of The Natural History Museum, London", role = c("cph")))
