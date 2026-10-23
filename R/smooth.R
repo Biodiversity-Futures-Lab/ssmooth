@@ -1,24 +1,32 @@
 #' Smooth Time Series Data
 #'
-#' Applies a smoothing operation to a numeric vector (time series data) using
-#' one of three methods: mean (moving average), weighted moving average, or
-#' exponential moving average.
+#' @description
+#' Applies a smoothing operation to a numeric vector (time series
+#' data) using one of three methods: mean (moving average), weighted moving
+#' average, or exponential moving average.
 #'
-#' For the "mean" method, a simple moving average is computed over a specified
-#' window size. For the "weighted" method, a weighted moving average is computed
-#' using a specified set of weights. For the "exponential" method, an
+#' @details
+#' For the "mean" method (\code{SimpleMA}), a simple moving average is
+#' computed over a specified window size. For the "weighted" method
+#' (\code{WeightedMA}), a weighted moving average is computed using a specified
+#' set of weights. For the "exponential" method (\code{ExponentialMA}), an
 #' exponential moving average is computed using a specified smoothing factor
 #' (alpha) and a specified number of initial points to use for the first
 #' smoothed value.
 #'
-#' If you use a windowing method (mean or weighted), the function pads the
-#' input vector with the mean of the non-NA values at the beginning and end to
-#' ensure that the output vector has the same length as the input.
+#' If you use a windowing method (mean or weighted), the function pads the input
+#' vector with the mean of the non-NA values at the beginning and end to ensure
+#' that the output vector has the same length as the input.
+#'
+#' We include functions to run these smoothers individually, if you so desire,
+#' without using the main \code{SmoothTS} function.
 #'
 #' @param x Numeric vector. The time series data to be smoothed.
 #' @param method Character. Smoothing method to use. Options are \code{"mean"},
 #'   \code{"weighted"}, or \code{"exponential"}. Default is
 #'   \code{"exponential"}.
+#' @param ... Additional arguments passed to the specific smoothing method
+#'   functions.
 #' @param n Integer. Number of points for the moving average (used in "mean"
 #'   method). Default is 3.
 #' @param weights Numeric vector. Weights for the weighted moving average (used
@@ -34,18 +42,12 @@
 #' @examples
 #' x <- 1:10
 #' SmoothTS(x, method = "mean", n = 3)
-#' SmoothTS(x, method = "weighted", n = 3, weights = c(0.1, 0.5, 0.4))
+#' SmoothTS(x, method = "weighted", weights = c(0.1, 0.5, 0.4))
 #' SmoothTS(x, method = "exponential", alpha = 0.5, n_init = 3)
 #'
 #' @export
-SmoothTS <- function(
-  x,
-  method = "exponential",
-  n = 3,
-  weights = rep(1, 3),
-  alpha = 0.3,
-  n_init = 5
-) {
+#' @rdname SmoothTS
+SmoothTS <- function(x, method = "exponential", ...) {
   # Guard against all NA input: return as is
   if (all(is.na(x))) {
     return(x)
@@ -55,42 +57,57 @@ SmoothTS <- function(
     stop("Input x must be a numeric vector")
   }
 
-  if (!method %in% c("mean", "weighted", "exponential")) {
+  if (method == "mean") {
+    return(SimpleMA(x, ...))
+  } else if (method == "weighted") {
+    return(WeightedMA(x, ...))
+  } else if (method == "exponential") {
+    return(ExponentialMA(x, ...))
+  } else {
     stop("Method must be one of 'mean', 'weighted', or 'exponential'")
   }
+}
 
-  if (method == "mean") {
-    if (n <= 0 || n > length(x)) {
-      stop("n must be a positive integer <= length(x)")
-    }
-
-    return(simple_ma(x, n))
-  } else if (method == "weighted") {
-    if (!is.numeric(weights)) {
-      stop("weights must be a numeric vector")
-    }
-
-    if (length(weights) > length(x)) {
-      stop("Length of weights cannot be greater than the length of x")
-    }
-
-    if (any(weights <= 0)) {
-      stop("Weights have to be positive")
-    }
-
-    return(weighted_ma(x, weights))
-  } else if (method == "exponential") {
-    if (alpha <= 0 || alpha >= 1) {
-      stop("alpha must be between 0 and 1 for exponential moving average")
-    }
-
-    if (n_init <= 0 || n_init > length(x)) {
-      stop(
-        "n_init must be a positive integer <= length(x)"
-      )
-    }
-    return(exponential_ma(x, alpha, n_init))
+#' @export
+#' @rdname SmoothTS
+SimpleMA <- function(x, n = 3) {
+  if (n <= 0 || n > length(x)) {
+    stop("n must be a positive integer <= length(x)")
   }
+  return(simple_ma(x, n))
+}
+
+#' @export
+#' @rdname SmoothTS
+WeightedMA <- function(x, weights = c(1, 1, 1)) {
+  if (!is.numeric(weights)) {
+    stop("weights must be a numeric vector")
+  }
+
+  if (length(weights) > length(x)) {
+    stop("Length of weights cannot be greater than the length of x")
+  }
+
+  if (any(weights <= 0)) {
+    stop("Weights have to be positive")
+  }
+
+  return(weighted_ma(x, weights))
+}
+
+#' @export
+#' @rdname SmoothTS
+ExponentialMA <- function(x, alpha = 0.3, n_init = 5) {
+  if (alpha <= 0 || alpha >= 1) {
+    stop("alpha must be between 0 and 1 for exponential moving average")
+  }
+
+  if (n_init <= 0 || n_init > length(x)) {
+    stop(
+      "n_init must be a positive integer <= length(x)"
+    )
+  }
+  return(exponential_ma(x, alpha, n_init))
 }
 
 #' Smooth Raster Time Series

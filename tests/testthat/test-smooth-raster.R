@@ -36,7 +36,7 @@ test_that("SmoothRasterTS works with weighted moving average", {
   rast <- MakeTestRaster(nrow = 1, ncol = 1, nlayers = 5)
   weights <- c(0.2, 0.3, 0.5)
   expect_warning(
-    out <- SmoothRasterTS(rast, method = "weighted", n = 3, weights = weights),
+    out <- SmoothRasterTS(rast, method = "weighted", weights = weights),
     "Input raster has incomplete dates: smoothing will be applied across layers in order"
   )
   mat <- terra::values(out)
@@ -70,6 +70,25 @@ test_that("SmoothRasterTS works with exponential moving average", {
     expected[i] <- alpha * i + (1 - alpha) * expected[i - 1]
   }
   expect_equal(mat, expected, ignore_attr = TRUE, tolerance = 1e-8)
+})
+
+test_that("SmoothRasterTS errors for argument collision", {
+  rast <- MakeTestRaster(nrow = 2, ncol = 2, nlayers = 5)
+  expect_warning(
+    expect_error(
+      SmoothRasterTS(
+        rast,
+        method = "exponential",
+        alpha = 0.3,
+        n_init = 1,
+        n = 3,
+        weights = c(1, 1, 1),
+        n_init = 3
+      ),
+      regexp = "cannot use this function"
+    ),
+    "Input raster has incomplete dates: smoothing will be applied across layers in order"
+  )
 })
 
 test_that("SmoothRasterTS errors for incorrect input datatype", {
